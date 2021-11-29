@@ -1,0 +1,10 @@
+flask
+nltk
+spacy
+torch
+transformers
+vaderSentiment
+pandas
+contextualSpellCheck
+textblob
+gunicorn
