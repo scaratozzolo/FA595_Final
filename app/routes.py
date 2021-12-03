@@ -32,7 +32,7 @@ def services():
 
     __services = {
                 "all": all_service,
-                # "chat_bot": chat_bot_service,
+                "lstm_model": lstm_service,
                 # "next_word": next_word_service,
                 # "word_freq": word_frequency_service,
                 # "word_lem": word_lemmatization_service,
@@ -71,7 +71,7 @@ def all_service(data=None):
             return jsonify({"error":"no data provided"})
 
     services = {}
-    # services["chat_bot"] = chat_bot_service(data).get_json()
+    services["lstm_model"] = lstm_service(data).get_json()
     # services["next_word"] = next_word_service(data).get_json()
     # services["word_freq"] = word_frequency_service(data).get_json()
     # services["word_lem"] = word_lemmatization_service(data).get_json()
@@ -82,17 +82,17 @@ def all_service(data=None):
 
     return jsonify(services)
 
-@app.route("/api/services/template", methods=["POST"])
-def template_service(data=None):
+@app.route("/api/services/lstm_model", methods=["POST"])
+def lstm_service(data=None):
 
     if not data:
         data = request.json
         if not data:
             return jsonify({"error":"no data provided"})
 
-    if "text" not in data:
-        return jsonify({"error":"'text' missing from payload"})
+    if "ticker" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
 
-    return jsonify(template(text=data['text']))
+    return jsonify(lstm_model(ticker=data['ticker']))
 
 
