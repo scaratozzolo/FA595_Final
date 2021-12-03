@@ -22,15 +22,8 @@ This endpoint will return a json object containing information regarding the ava
 
 The services available are as follows:
 
- - "all" : /nlp/services/all
- - "chat_bot" : /nlp/services/chat_bot
- - "next_word" : /nlp/services/next_word
- - "word_freq" : /nlp/services/word_freq
- - "word_lem" : /nlp/services/word_lem
- - "entity_ext" : /nlp/services/entity_ext
- - "text_sentiment" : /nlp/services/text_sentiment
- - "spellcheck" : /nlp/services/spellcheck
- - "translate" : /nlp/services/translate 
+ - "all" : /api/services/all
+ - "lstm_model" : /api/services/lstm_model
 
  The string in quotes can be used when defining a subset of services while performing a POST request on /nlp/services
 
@@ -54,7 +47,7 @@ This endpoint can only be accessed through a POST request. The payload must cont
 Response from the server will look like:
 
 {
-  "chat_bot": {
+  "lstm_model": {
     ...
   }, 
   "next_word": {
@@ -65,16 +58,16 @@ Response from the server will look like:
 
 Each key in the response is equal to the values returned from /nlp/services.
 
-### POST /api/services/template
+### POST /api/services/lstm_model
 
-The chat_bot endpoint allows a user to send a string of text to the server and receive back a response as if you were speaking to someone. Through the use of the chat_id in the payload, the history of the chat can be maintained and improves the response from the server.
+The lstm_model endpoint allows a user to send a ticker to the server and have a long short term memory regression model be built using the previous one year of adjusted closes. The model will then predict the next day share price.
 
 This endpoint can only be accessed through a POST request. The payload must be in the form of one of two options: 
 
-{"text": "your text here"} or {"text": "your text here", "chat_id": integer}
+{"ticker": "your ticker"}}
 
 Response from the server will look like:
 
-{"response": "chat bot response", "chat_id": integer}
+{"prediction": float, "mse": float}
 
 
