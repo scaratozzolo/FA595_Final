@@ -24,6 +24,7 @@ The services available are as follows:
 
  - "all" : /api/services/all
  - "lstm_model" : /api/services/lstm_model
+ - "allocation" : /api/services/allocation
 
  The string in quotes can be used when defining a subset of services while performing a POST request on /nlp/services
 
