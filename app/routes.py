@@ -32,14 +32,8 @@ def services():
 
     __services = {
                 "all": all_service,
-                # "chat_bot": chat_bot_service,
-                # "next_word": next_word_service,
-                # "word_freq": word_frequency_service,
-                # "word_lem": word_lemmatization_service,
-                # "entity_ext": entity_ext_service,
-                # "text_sentiment": text_sentiment_service,
-                # "spellcheck": spellcheck_service,
-                # "translate": translate_service
+                "lstm_model": lstm_service,
+                "allocation": allocation_service,
         }
 
     if request.method == "GET":
@@ -71,28 +65,38 @@ def all_service(data=None):
             return jsonify({"error":"no data provided"})
 
     services = {}
-    # services["chat_bot"] = chat_bot_service(data).get_json()
-    # services["next_word"] = next_word_service(data).get_json()
-    # services["word_freq"] = word_frequency_service(data).get_json()
-    # services["word_lem"] = word_lemmatization_service(data).get_json()
-    # services["entity_ext"] = entity_ext_service(data).get_json()
-    # services["text_sentiment"] = text_sentiment_service(data).get_json()
-    # services["spellcheck"] = spellcheck_service(data).get_json()
-    # services["translate"] = translate_service(data).get_json()
+    services["lstm_model"] = lstm_service(data).get_json()
+    services["allocation"] = allocation_service(data).get_json()
 
     return jsonify(services)
 
-@app.route("/api/services/template", methods=["POST"])
-def template_service(data=None):
+@app.route("/api/services/lstm_model", methods=["POST"])
+def lstm_service(data=None):
 
     if not data:
         data = request.json
         if not data:
             return jsonify({"error":"no data provided"})
 
-    if "text" not in data:
-        return jsonify({"error":"'text' missing from payload"})
+    if "ticker" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
 
-    return jsonify(template(text=data['text']))
+    return jsonify(lstm_model(ticker=data['ticker']))
+
+
+@app.route("/api/services/allocation", methods=["POST"])
+def allocation_service(data=None):
+
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "tickers" not in data:
+        return jsonify({"error":"'tickers' missing from payload"})
+    elif type(data["tickers"]) is not list:
+        return jsonify({"error":"'tickers' is not a list"})
+
+    return jsonify(PortOpt(tickers=data['tickers']).allocate())
 
 
