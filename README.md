@@ -34,7 +34,7 @@ This endpoint allows a user to send a string of text to the server and receive a
 The payload must contain a text string, the subset of services as a list, as well as all of the other parameters that should be passed to each endpoint.
 For example:
 
-{"text": "your text here", "services":["chat_bot", "next_word"], "chat_id": integer, "num_words": integer}
+{"text": "your text here", "services":["lstm_model", "allocation"]}
 
 ### POST /api/services/all
 
@@ -50,7 +50,7 @@ Response from the server will look like:
   "lstm_model": {
     ...
   }, 
-  "next_word": {
+  "allocation": {
     ...
   },
   ...
@@ -62,12 +62,27 @@ Each key in the response is equal to the values returned from /nlp/services.
 
 The lstm_model endpoint allows a user to send a ticker to the server and have a long short term memory regression model be built using the previous one year of adjusted closes. The model will then predict the next day share price.
 
-This endpoint can only be accessed through a POST request. The payload must be in the form of one of two options: 
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
 
 {"ticker": "your ticker"}}
 
 Response from the server will look like:
 
 {"prediction": float, "mse": float}
+
+
+### POST /api/services/allocation
+
+The allocation endpoint allows a user to send a list of tickers to the server and recieve the max Sharpe allocation percentages.
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"tickers": ["list", "of", "tickers"]}
+
+Response from the server will look like:
+
+{'results': [], 'sharpe': float, 'tickers': []}
+
+The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
 
 

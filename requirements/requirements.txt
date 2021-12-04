@@ -2,3 +2,4 @@ flask
 yfinance
 tf-nightly
 scikit-learn
+scipy

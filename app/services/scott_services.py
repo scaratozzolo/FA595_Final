@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+import scipy.optimize as opt
 
 
 def lstm_model(ticker):
@@ -36,7 +37,45 @@ def lstm_model(ticker):
     return {"prediction": float(prediction[0][0]), "mse": float(train_score)}
 
 
+
+class PortOpt:
+
+    def __init__(self, tickers):
+        
+        self.tickers = tickers
+        self.data = yf.download(self.tickers, start=pd.Timestamp.today() - pd.DateOffset(years=1), progress=False)["Adj Close"]
+
+        self.rets = self.data.pct_change()
+
+    def _get_ret_vol_sr(self, weights):
+        """
+        Calculates the returns, volatility, and sharpe of a portfolio with given weights
+        """
+        weights = np.array(weights)
+        ret = np.sum(self.rets.mean() * weights) * 252
+        vol = np.sqrt(np.dot(weights.T, np.dot(self.rets.cov()*252, weights)))
+        sr = ret/vol
+        return np.array([ret, vol, sr])
+
+    def _neg_sharpe(self, weights):
+        return self._get_ret_vol_sr(weights)[2] * -1
+
+    def allocate(self):
+
+        cons = ({'type':'eq', 'fun': lambda x: np.sum(x)-1})
+        bounds = tuple((0,1) for _ in range(len(self.tickers)))
+        init_guess = [1/len(self.tickers) for _ in range(len(self.tickers))]
+
+        opt_results = opt.minimize(self._neg_sharpe, init_guess, method='SLSQP', bounds=bounds, constraints=cons)
+
+        return {"results": opt_results.x.round(3).tolist(), "tickers": self.rets.columns.to_list(), "sharpe": opt_results.fun.round(3)*-1}
+
+
+
+
 if __name__ == '__main__':
-    import json
-    t = lstm_model("AAPL")
-    print(json.dumps(t))
+    # import json
+    # t = lstm_model("AAPL")
+    # print(json.dumps(t))
+
+    print(PortOpt(["aapl", "goog", "fb"]).allocate())
