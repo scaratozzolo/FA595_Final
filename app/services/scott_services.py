@@ -68,7 +68,7 @@ class PortOpt:
 
         opt_results = opt.minimize(self._neg_sharpe, init_guess, method='SLSQP', bounds=bounds, constraints=cons)
 
-        return {"results": opt_results.x.round(3).tolist(), "tickers": self.rets.columns.to_list(), "sharpe": opt_results.fun.round(3)*-1}
+        return {"results": {k:v for k,v in zip(self.rets.columns.to_list(), opt_results.x.round(3).tolist())}, "sharpe": opt_results.fun.round(3)*-1}
 
 
 

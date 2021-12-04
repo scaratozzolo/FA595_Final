@@ -81,7 +81,7 @@ This endpoint can only be accessed through a POST request. The payload must be i
 
 Response from the server will look like:
 
-{'results': [], 'sharpe': float, 'tickers': []}
+{'results': {"ticker": float}, 'sharpe': float}
 
 The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
 
