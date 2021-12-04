@@ -34,7 +34,7 @@ This endpoint allows a user to send a string of text to the server and receive a
 The payload must contain a text string, the subset of services as a list, as well as all of the other parameters that should be passed to each endpoint.
 For example:
 
-{"text": "your text here", "services":["lstm_model", "allocation"]}
+{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "allocation"]}
 
 ### POST /api/services/all
 
@@ -42,7 +42,7 @@ The all endpoint allows a user to send a string of text to the server and receiv
 
 This endpoint can only be accessed through a POST request. The payload must contain a text string as well as all of the other parameters that should be passed to each endpoint. For example:
 
-{"text": "your text here", "chat_id": integer, "num_words": integer}
+{"ticker": "your ticker", "tickers": ["list", "of", "tickers"]}
 
 Response from the server will look like:
 
