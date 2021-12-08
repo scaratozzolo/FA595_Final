@@ -30,7 +30,7 @@ def max_ret(tick1,tick2,s1,s2,cor):
         w = D * (sig_inv @ rho) - ((A * D - 1) / C) * (sig_inv @ e)
         rts[i] = rho.T @ w
     result = dict(zip(rts , vols))
-    print(result)
+    #print(result)
     #plt.xlabel("Portfolio Risk")
     #plt.ylabel("Portfolio Expected Returns")
     #plt.title("Efficient Frontier")
