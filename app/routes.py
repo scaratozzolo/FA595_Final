@@ -34,6 +34,8 @@ def services():
                 "all": all_service,
                 "lstm_model": lstm_service,
                 "allocation": allocation_service,
+                "beta": beta_service,
+                "sharpe": sharpe_service
         }
 
     if request.method == "GET":
@@ -67,6 +69,8 @@ def all_service(data=None):
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
     services["allocation"] = allocation_service(data).get_json()
+    services["beta"] = beta_service(data).get_json()
+    services["sharpe"] = sharpe_service(data).get_json()
 
     return jsonify(services)
 
@@ -110,7 +114,7 @@ def beta_service(data=None):
     if "ticker" not in data:
         return jsonify({"error":"'ticker' missing from payload"})
 
-    return jsonify(Beta(ticker=data['ticker']))
+    return jsonify(beta(ticker=data['ticker'], start_dt=data['start date'], end_dt=data['end date'], inter=data['interval']))
 
 @app.route("/api/services/sharpe", methods=["POST"])
 def sharpe_service(data=None):
@@ -123,4 +127,4 @@ def sharpe_service(data=None):
     if "ticker" not in data:
         return jsonify({"error":"'ticker' missing from payload"})
 
-    return jsonify(Sharpe(ticker=data['ticker']))
+    return jsonify(sharpe(ticker=data['ticker'], start_dt=data['start date'], end_dt=data['end date'], inter=data['interval'], weights=data['weights']))
