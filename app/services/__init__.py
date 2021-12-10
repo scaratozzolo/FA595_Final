@@ -3,4 +3,4 @@
 from .scott_services import lstm_model, PortOpt
 # from .agathe_services import word_freq, word_lem
 # from .audrey_services import entity_ext, text_sentiment
-# from .natalia_services import spellcheck, translate
+from .natalia_services import Beta, Sharpe
