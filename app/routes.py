@@ -99,7 +99,7 @@ def allocation_service(data=None):
 
     return jsonify(PortOpt(tickers=data['tickers']).allocate())
 
-@app.route("/api/services/Beta", methods=["POST"])
+@app.route("/api/services/beta", methods=["POST"])
 def beta_service(data=None):
 
     if not data:
@@ -112,7 +112,7 @@ def beta_service(data=None):
 
     return jsonify(Beta(ticker=data['ticker']))
 
-@app.route("/api/services/Sharpe", methods=["POST"])
+@app.route("/api/services/sharpe", methods=["POST"])
 def sharpe_service(data=None):
 
     if not data:
