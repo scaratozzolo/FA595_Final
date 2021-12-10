@@ -99,4 +99,28 @@ def allocation_service(data=None):
 
     return jsonify(PortOpt(tickers=data['tickers']).allocate())
 
+@app.route("/api/services/Beta", methods=["POST"])
+def beta_service(data=None):
 
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "ticker" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+
+    return jsonify(Beta(ticker=data['ticker']))
+
+@app.route("/api/services/Sharpe", methods=["POST"])
+def sharpe_service(data=None):
+
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "ticker" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+
+    return jsonify(Sharpe(ticker=data['ticker']))
