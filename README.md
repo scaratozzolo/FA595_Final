@@ -86,3 +86,16 @@ Response from the server will look like:
 The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
 
 
+### POST /api/services/compute_VaR
+
+The compute_VaR endpoint allows a user to send a list of tickers to the server and receive the Value-at-Risk, given a portfolio allocation, return, and volatility.
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"tickers": ["list", "of", "tickers"]}
+
+Response from the server will look like:
+
+{"With 99% confidence, for every dollar invested, the losses will not exceed 'VaR' within the next 10 days. Investment allocation should be [['tickers' '%']], at % return and % volatility"}
+
+
