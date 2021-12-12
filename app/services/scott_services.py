@@ -29,12 +29,12 @@ def lstm_model(ticker):
     train_predict = scaler.inverse_transform(train_predict)
     y = scaler.inverse_transform(y)
 
-    train_score = mean_squared_error(y, train_predict)
+    train_score = np.sqrt(mean_squared_error(y, train_predict))
 
     prediction = model.predict(dataset[-1].reshape(-1,1))
     prediction = scaler.inverse_transform(prediction)
 
-    return {"prediction": float(prediction[0][0]), "mse": float(train_score)}
+    return {"prediction": float(prediction[0][0]), "rmse": float(train_score)}
 
 
 
