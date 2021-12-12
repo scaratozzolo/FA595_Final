@@ -24,6 +24,7 @@ The services available are as follows:
 
  - "all" : /api/services/all
  - "lstm_model" : /api/services/lstm_model
+ - "allocation" : /api/services/allocation
 
  The string in quotes can be used when defining a subset of services while performing a POST request on /nlp/services
 
@@ -50,7 +51,7 @@ Response from the server will look like:
   "lstm_model": {
     ...
   }, 
-  "allocation": {
+  "beta_allocation": {
     ...
   },
   ...
@@ -71,17 +72,17 @@ Response from the server will look like:
 {"prediction": float, "mse": float}
 
 
-### POST /api/services/allocation
+### POST /api/services/beta_allocation
 
-The allocation endpoint allows a user to send a list of tickers to the server and recieve the max Sharpe allocation percentages.
+The beta_allocation endpoint allows a user to send a list of tickers and a target beta to the server and recieve the max Sharpe allocation percentages while maintaining the target beta.
 
 This endpoint can only be accessed through a POST request. The payload must be in the form of: 
 
-{"tickers": ["list", "of", "tickers"]}
+{"tickers": ["list", "of", "tickers"], "beta": float}
 
 Response from the server will look like:
 
-{'results': {"ticker": float}, 'sharpe': float}
+{'results': {"ticker": float}, 'sharpe': float, 'calculated_beta': float, 'success': boolean}
 
 The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
 

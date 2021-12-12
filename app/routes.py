@@ -33,7 +33,7 @@ def services():
     __services = {
                 "all": all_service,
                 "lstm_model": lstm_service,
-                "allocation": allocation_service,
+                "beta_allocation": beta_allocation_service,
                 "compute_VaR": compute_VaR_service
         }
 
@@ -67,7 +67,7 @@ def all_service(data=None):
 
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
-    services["allocation"] = allocation_service(data).get_json()
+    services["beta_allocation"] = beta_allocation_service(data).get_json()
     services["compute_VaR"] = compute_VaR_service(data).get_json()
 
     return jsonify(services)
@@ -86,8 +86,8 @@ def lstm_service(data=None):
     return jsonify(lstm_model(ticker=data['ticker']))
 
 
-@app.route("/api/services/allocation", methods=["POST"])
-def allocation_service(data=None):
+@app.route("/api/services/beta_allocation", methods=["POST"])
+def beta_allocation_service(data=None):
 
     if not data:
         data = request.json
@@ -98,8 +98,10 @@ def allocation_service(data=None):
         return jsonify({"error":"'tickers' missing from payload"})
     elif type(data["tickers"]) is not list:
         return jsonify({"error":"'tickers' is not a list"})
+    elif "beta" not in data:
+        return jsonify({"error":"'beta' missing from payload"})
 
-    return jsonify(PortOpt(tickers=data['tickers']).allocate())
+    return jsonify(PortOpt(tickers=data['tickers'], beta=data['beta']).allocate())
 
 
 @app.route("/api/services/compute_VaR", methods=["POST"])
