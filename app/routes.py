@@ -34,6 +34,7 @@ def services():
                 "all": all_service,
                 "lstm_model": lstm_service,
                 "allocation": allocation_service,
+                "compute_VaR": compute_VaR_service
         }
 
     if request.method == "GET":
@@ -67,6 +68,7 @@ def all_service(data=None):
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
     services["allocation"] = allocation_service(data).get_json()
+    services["compute_VaR"] = compute_VaR_service(data).get_json()
 
     return jsonify(services)
 
@@ -100,3 +102,16 @@ def allocation_service(data=None):
     return jsonify(PortOpt(tickers=data['tickers']).allocate())
 
 
+@app.route("/api/services/compute_VaR", methods=["POST"])
+def compute_VaR_service(data=None):
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error": "no data provided"})
+
+    if "tickers" not in data:
+        return jsonify({"error": "'tickers' missing from payload"})
+    elif type(data["tickers"]) is not list:
+        return jsonify({"error":"'tickers' is not a list"})
+
+    return jsonify(compute_VaR(tickers=data['tickers']))
