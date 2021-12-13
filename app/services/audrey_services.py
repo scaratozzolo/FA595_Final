@@ -50,10 +50,12 @@ def compute_VaR(tickers):
         VaR_1 = port_mean_opt * port_sd_opt * z
         VaR_N = round(VaR_1 * np.sqrt(N), 4)
         w = ["{:.0%}".format(1)]
-
-    return {"With 99% confidence, for every dollar invested, the losses will not exceed " + str(VaR_N) + " within the next " + str(N) + " days. "
-            "Investment allocation should be " + str(np.stack((tickers, w), axis=1)) + ", at " + str("%.2f%%" % (port_mean_opt*100)) + " return and "
-            + str("%.2f%%" % (port_sd_opt*100)) + " volatility."}
+    allocation = np.stack((tickers, w), axis=1).tolist()
+    allocation = " ".join(str(x) for x in allocation)
+    out_string = ("With 99% confidence, for every dollar invested, the losses will not exceed " + str(VaR_N) + " within the next " + str(N) + " days. "
+            "Investment allocation should be " + str(allocation) + ", at " + str("%.2f%%" % (port_mean_opt*100)) + " return and "
+            + str("%.2f%%" % (port_sd_opt*100)) + " volatility.")
+    return {out_string}
 
 
 #tickers = ['AAPL', 'FB', 'AMZN', 'MRNA','SBUX', 'NKE']
