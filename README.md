@@ -84,8 +84,6 @@ Response from the server will look like:
 
 {'results': {"ticker": float}, 'sharpe': float, 'calculated_beta': float, 'success': boolean}
 
-The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
-
 
 ### POST /api/services/compute_VaR
 
