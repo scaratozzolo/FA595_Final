@@ -35,7 +35,7 @@ This endpoint allows a user to send a string of text to the server and receive a
 The payload must contain a text string, the subset of services as a list, as well as all of the other parameters that should be passed to each endpoint.
 For example:
 
-{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "allocation"]}
+{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "beta_allocation"]}
 
 ### POST /api/services/all
 
