@@ -3,3 +3,4 @@ yfinance
 tf-nightly
 scikit-learn
 scipy
+cvxopt

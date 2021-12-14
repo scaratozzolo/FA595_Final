@@ -26,6 +26,7 @@ The services available are as follows:
  - "lstm_model" : /api/services/lstm_model
  - "beta" : /api/services/beta
  - "sharpe" : /api/services/sharpe
+ - "beta_allocation" : /api/services/beta_allocation
 
  The string in quotes can be used when defining a subset of services while performing a POST request on /api/services
 
@@ -36,7 +37,8 @@ This endpoint allows a user to send a string of text to the server and receive a
 The payload must contain a text string, the subset of services as a list, as well as all of the other parameters that should be passed to each endpoint.
 For example:
 
-{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "allocation", "beta", "sharpe"]}
+{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "beta_allocation", "beta", "sharpe"]}
+
 
 ### POST /api/services/all
 
@@ -52,7 +54,7 @@ Response from the server will look like:
   "lstm_model": {
     ...
   }, 
-  "allocation": {
+  "beta_allocation": {
     ...
   },
   "beta": {
@@ -79,9 +81,22 @@ Response from the server will look like:
 {"prediction": float, "mse": float}
 
 
-### POST /api/services/allocation
+### POST /api/services/beta_allocation
 
-The allocation endpoint allows a user to send a list of tickers to the server and recieve the max Sharpe allocation percentages.
+The beta_allocation endpoint allows a user to send a list of tickers and a target beta to the server and recieve the max Sharpe allocation percentages while maintaining the target beta.
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"tickers": ["list", "of", "tickers"], "beta": float}
+
+Response from the server will look like:
+
+{'results': {"ticker": float}, 'sharpe': float, 'calculated_beta': float, 'success': boolean}
+
+
+### POST /api/services/compute_VaR
+
+The compute_VaR endpoint allows a user to send a list of tickers to the server and receive the Value-at-Risk for every dollar invested, given a portfolio allocation, return, and volatility.
 
 This endpoint can only be accessed through a POST request. The payload must be in the form of: 
 
@@ -89,10 +104,8 @@ This endpoint can only be accessed through a POST request. The payload must be i
 
 Response from the server will look like:
 
-{'results': {"ticker": float}, 'sharpe': float}
-
-The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
-
+['{"columns":["Col1","Col2"],"index":[0,1,2,3],"data":[["ticker","%"],["ticker","%"],["portfolio mean","%"],["portfolio volatility","%"]]}', 
+'10-day VaR at 99% confidence level is "VaR", given the weight of each asset, portfolio mean, and portfolio volatility above.']
 
 ### POST /api/services/beta
 

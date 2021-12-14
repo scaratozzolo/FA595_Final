@@ -29,23 +29,36 @@ def lstm_model(ticker):
     train_predict = scaler.inverse_transform(train_predict)
     y = scaler.inverse_transform(y)
 
-    train_score = mean_squared_error(y, train_predict)
+    train_score = np.sqrt(mean_squared_error(y, train_predict))
 
     prediction = model.predict(dataset[-1].reshape(-1,1))
     prediction = scaler.inverse_transform(prediction)
 
-    return {"prediction": float(prediction[0][0]), "mse": float(train_score)}
+    return {"prediction": float(prediction[0][0]), "rmse": float(train_score)}
 
 
 
 class PortOpt:
 
-    def __init__(self, tickers):
+    def __init__(self, tickers, beta):
         
         self.tickers = tickers
+        self.beta_target = beta
         self.data = yf.download(self.tickers, start=pd.Timestamp.today() - pd.DateOffset(years=1), progress=False)["Adj Close"]
 
         self.rets = self.data.pct_change()
+
+
+        self.bench_data = yf.download("SPY", start=pd.Timestamp.today() - pd.DateOffset(years=1), progress=False)["Adj Close"]
+        self.bench_rets = self.bench_data.pct_change()
+
+        t = pd.concat([self.bench_rets, self.rets], axis=1)
+
+        # Betas vector
+        hist_covs = np.array(t.cov().iloc[0])
+        bench_var = hist_covs[0]
+        self.beta_vec = hist_covs[1:]/bench_var
+        
 
     def _get_ret_vol_sr(self, weights):
         """
@@ -62,13 +75,16 @@ class PortOpt:
 
     def allocate(self):
 
-        cons = ({'type':'eq', 'fun': lambda x: np.sum(x)-1})
+        cons = ({'type':'eq', 'fun': lambda x: np.sum(x)-1},
+                {'type':'eq', 'fun': lambda x: np.dot(self.beta_vec, x)-self.beta_target})
+
         bounds = tuple((0,1) for _ in range(len(self.tickers)))
         init_guess = [1/len(self.tickers) for _ in range(len(self.tickers))]
 
         opt_results = opt.minimize(self._neg_sharpe, init_guess, method='SLSQP', bounds=bounds, constraints=cons)
-
-        return {"results": {k:v for k,v in zip(self.rets.columns.to_list(), opt_results.x.round(3).tolist())}, "sharpe": opt_results.fun.round(3)*-1}
+        
+        return {"results": {k:v for k,v in zip(self.rets.columns.to_list(), opt_results.x.round(3).tolist())}, "sharpe": opt_results.fun.round(3)*-1, 
+                "calculated_beta": np.dot(self.beta_vec, opt_results.x).round(3), "success": str(opt_results.success)}
 
 
 
@@ -78,4 +94,4 @@ if __name__ == '__main__':
     # t = lstm_model("AAPL")
     # print(json.dumps(t))
 
-    print(PortOpt(["aapl", "goog", "fb"]).allocate())
+    print(PortOpt(['AAPL', 'FB', 'AMZN', 'MRNA','SBUX', 'NKE'], 1).allocate())
