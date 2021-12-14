@@ -116,10 +116,6 @@ def allocation_service(data=None):
         return jsonify({"error":"'ticker' missing from payload"})
     elif "tick2" not in data:
         return jsonify({"error":"'ticker' missing from payload"})
-    elif type(data["tick1"]) is not str:
-        return jsonify({"error":"'tickers' is not a string"})
-    elif type(data["tick2"]) is not str:
-        return jsonify({"error":"'tickers' is not a string"})
     elif "s1" not in data:
         return jsonify({"error":"'variance' missing from payload"})
     elif "s2" not in data:
@@ -142,10 +138,6 @@ def allocation_service(data=None):
         return jsonify({"error":"'ticker' missing from payload"})
     elif "tick2" not in data:
         return jsonify({"error":"'ticker' missing from payload"})
-    elif type(data["tick1"]) is not str:
-        return jsonify({"error":"'tickers' is not a string"})
-    elif type(data["tick2"]) is not str:
-        return jsonify({"error":"'tickers' is not a string"})
     elif "s1" not in data:
         return jsonify({"error":"'variance' missing from payload"})
     elif "s2" not in data:
