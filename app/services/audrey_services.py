@@ -51,15 +51,9 @@ def compute_VaR(tickers):
         VaR_N = round(VaR_1 * np.sqrt(N), 4)
         w = ["{:.0%}".format(1)]
     df = pd.DataFrame(data={"Col1": tickers, "Col2": w})
-    df.loc[len(df)] = ["portfolio mean", port_mean_opt]
-    df.loc[len(df)] = ["portfolio volatility", port_sd_opt]
-    out_string = ("Given the weight of each asset, portfolio mean, and portfolio volatility below, "
-                  "10-day VaR at 99% confidence level is " + str(VaR_N))
-    # allocation = np.stack((tickers, w), axis=1).tolist()
-    # allocation = " ".join(str(x) for x in allocation)
-    # out_string = ("With 99% confidence, for every dollar invested, the losses will not exceed " + str(VaR_N) + " within the next " + str(N) + " days. "
-    #         "Investment allocation should be " + str(allocation) + ", at " + str("%.2f%%" % (port_mean_opt*100)) + " return and "
-    #         + str("%.2f%%" % (port_sd_opt*100)) + " volatility.")
+    df.loc[len(df)] = ["portfolio mean", "{}%".format(np.round(port_mean_opt*100, decimals=2))]
+    df.loc[len(df)] = ["portfolio volatility", "{}%".format(np.round(port_sd_opt*100, decimals=2))]
+    out_string = ("10-day VaR at 99% confidence level is " + str(VaR_N) + ", given the weight of each asset, portfolio mean, and portfolio volatility above.")
     return [df.to_json(orient = 'split'), out_string]
 
 
