@@ -152,5 +152,4 @@ def allocation_service(data=None):
         return jsonify({"error":"'variance' missing from payload"})
     elif "cor" not in data:
         return jsonify({"error":"'correlation' missing from payload"})
-
     return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],tick2=data['tick2'],cor=data['cor'])
