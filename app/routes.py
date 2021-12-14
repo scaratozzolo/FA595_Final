@@ -34,7 +34,7 @@ def services():
                 "all": all_service,
                 "lstm_model": lstm_service,
                 "beta": beta_service,
-                "sharpe": sharpe_service
+                "sharpe": sharpe_service,
                 "beta_allocation": beta_allocation_service,
                 "compute_VaR": compute_VaR_service
         }
@@ -158,7 +158,7 @@ def sharpe_service(data=None):
 
     return jsonify(sharpe(tickers=data['tickers'], start_dt=data['start_dt'], end_dt=data['end_dt'], inter=data['inter'], weights=data['weights']))
 
-  @app.route("/api/services/compute_VaR", methods=["POST"])
+@app.route("/api/services/compute_VaR", methods=["POST"])
 def compute_VaR_service(data=None):
     if not data:
         data = request.json
