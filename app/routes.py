@@ -33,6 +33,9 @@ def services():
     __services = {
                 "all": all_service,
                 "lstm_model": lstm_service,
+                "allocation": allocation_service,
+                "max_ret" : maximum_return_service,
+                "min_risk": minimum_risk_service
                 "beta": beta_service,
                 "sharpe": sharpe_service,
                 "beta_allocation": beta_allocation_service,
@@ -69,6 +72,9 @@ def all_service(data=None):
 
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
+    services["allocation"] = allocation_service(data).get_json()
+    services["max_ret"] = maximum_return_service(data).get_json()
+    services["min_risk"] = minimum_risk_service(data).get_json()
     services["beta"] = beta_service(data).get_json()
     services["sharpe"] = sharpe_service(data).get_json()
     services["beta_allocation"] = beta_allocation_service(data).get_json()
@@ -107,14 +113,54 @@ def beta_allocation_service(data=None):
 
     return jsonify(PortOpt(tickers=data['tickers'], beta=data['beta']).allocate())
 
-@app.route("/api/services/beta", methods=["POST"])
-def beta_service(data=None):
+  
+
+@app.route("/api/services/max_ret", methods=["POST"])
+def maximum_return_service(data=None):
 
     if not data:
         data = request.json
         if not data:
             return jsonify({"error":"no data provided"})
 
+    if "tick1" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "tick2" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "s1" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "s2" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "cor" not in data:
+        return jsonify({"error":"'covariance' missing from payload"})
+
+    return jsonify(max_ret(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor'])
+
+                   
+ @app.route("/api/services/min_risk", methods=["POST"])
+def minimum_risk_service(data=None):
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "tick1" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "tick2" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "s1" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "s2" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "cor" not in data:
+        return jsonify({"error":"'covariance' missing from payload"})
+                   
+    return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor'])
+                   
+                   
+ @app.route("/api/services/beta", methods=["POST"])
+def beta_service(data=None):                  
+                   
     if "tickers" not in data:
         return jsonify({"error":"'tickers' missing from payload"})
     elif "start_dt" not in data:
@@ -131,11 +177,6 @@ def beta_service(data=None):
 
 @app.route("/api/services/sharpe", methods=["POST"])
 def sharpe_service(data=None):
-
-    if not data:
-        data = request.json
-        if not data:
-            return jsonify({"error":"no data provided"})
 
     if "tickers" not in data:
         return jsonify({"error":"'tickers' missing from payload"})
