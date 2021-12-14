@@ -24,9 +24,11 @@ The services available are as follows:
 
  - "all" : /api/services/all
  - "lstm_model" : /api/services/lstm_model
+ - "beta" : /api/services/beta
+ - "sharpe" : /api/services/sharpe
  - "beta_allocation" : /api/services/beta_allocation
 
- The string in quotes can be used when defining a subset of services while performing a POST request on /nlp/services
+ The string in quotes can be used when defining a subset of services while performing a POST request on /api/services
 
 ### POST /api/services 
 
@@ -35,7 +37,8 @@ This endpoint allows a user to send a string of text to the server and receive a
 The payload must contain a text string, the subset of services as a list, as well as all of the other parameters that should be passed to each endpoint.
 For example:
 
-{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "beta_allocation"]}
+{"ticker": "your ticker", "tickers": ["list", "of", "tickers"], "services":["lstm_model", "beta_allocation", "beta", "sharpe"]}
+
 
 ### POST /api/services/all
 
@@ -52,6 +55,12 @@ Response from the server will look like:
     ...
   }, 
   "beta_allocation": {
+    ...
+  },
+  "beta": {
+    ...
+  },
+  "sharpe": {
     ...
   },
   ...
@@ -98,3 +107,27 @@ Response from the server will look like:
 ['{"columns":["Col1","Col2"],"index":[0,1,2,3],"data":[["ticker","%"],["ticker","%"],["portfolio mean","%"],["portfolio volatility","%"]]}', 
 '10-day VaR at 99% confidence level is "VaR", given the weight of each asset, portfolio mean, and portfolio volatility above.']
 
+### POST /api/services/beta
+
+The beta endpoint allows a user to send a pair of tickers to the server to calculate the correlation between the stocks based on the adjusted close for a specific amount of time and interval. Note the interval codes are: 1d, 5d, 1wk, 1m, 2m, ...
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"ticker": ["x", "y"], "start date": 'YYYY-MM-DD', "end date": 'YYYY-MM-DD', "interval": 'see codes'}
+
+Response from the server will look like:
+
+{"Beta": float}
+
+
+### POST /api/services/sharpe
+
+The sharpe endpoint allows a user to send a list of tickers and associated weights to the server to calculate the sharpe ratio of the portfolio. Note each ticker requires a weight (entered in the order of the ticker list), and the sum of weights must equal 100%. Note the interval codes are: 1d, 5d, 1wk, 1m, 2m, ...
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"ticker": ["list", "of", "tickers"], "start date": 'YYYY-MM-DD', "end date": 'YYYY-MM-DD', "interval": 'see codes', "weights": [w1, w2, w3]}
+
+Response from the server will look like:
+
+{"Sharpe Ratio": float}
