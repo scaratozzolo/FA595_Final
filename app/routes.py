@@ -113,17 +113,17 @@ def beta_service(data=None):
 
     if "tickers" not in data:
         return jsonify({"error":"'tickers' missing from payload"})
-    elif "start date" not in data:
+    elif "start_dt" not in data:
         return jsonify({"error":"'start date' missing from payload"})
-    elif "end date" not in data:
+    elif "end_dt" not in data:
         return jsonify({"error":"'end date' missing from payload"})
-    elif "interval" not in data:
+    elif "inter" not in data:
         return jsonify({"error":"'interval' missing from payload"})
     # Check that two tickers are inputted
     elif len(data["tickers"]) != 2:
         return jsonify({"error":"input two tickers"})
 
-    return jsonify(beta(tickers=data['tickers'], start_dt=data['start date'], end_dt=data['end date'], inter=data['interval']))
+    return jsonify(beta(tickers=data['tickers'], start_dt=data['start_dt'], end_dt=data['end_dt'], inter=data['inter']))
 
 @app.route("/api/services/sharpe", methods=["POST"])
 def sharpe_service(data=None):
@@ -135,11 +135,11 @@ def sharpe_service(data=None):
 
     if "tickers" not in data:
         return jsonify({"error":"'tickers' missing from payload"})
-    elif "start date" not in data:
+    elif "start_dt" not in data:
         return jsonify({"error":"'start date' missing from payload"})
-    elif "end date" not in data:
+    elif "end_dt" not in data:
         return jsonify({"error":"'end date' missing from payload"})
-    elif "interval" not in data:
+    elif "inter" not in data:
         return jsonify({"error":"'interval' missing from payload"})
     elif "weights" not in data:
         return jsonify({"error":"'weights' missing from payload"})
@@ -152,4 +152,4 @@ def sharpe_service(data=None):
     if sum(data["weights"]) != 1:
         return jsonify({"error":"check that weights total 100%"})
 
-    return jsonify(sharpe(tickers=data['tickers'], start_dt=data['start date'], end_dt=data['end date'], inter=data['interval'], weights=data['weights']))
+    return jsonify(sharpe(tickers=data['tickers'], start_dt=data['start_dt'], end_dt=data['end_dt'], inter=data['inter'], weights=data['weights']))
