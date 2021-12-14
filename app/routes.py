@@ -69,6 +69,8 @@ def all_service(data=None):
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
     services["allocation"] = allocation_service(data).get_json()
+    services["max_ret"] = maximum_return_service(data).get_json()
+    services["min_risk"] = minimum_risk_service(data).get_json()
 
     return jsonify(services)
 
