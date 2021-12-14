@@ -24,6 +24,8 @@ The services available are as follows:
 
  - "all" : /api/services/all
  - "lstm_model" : /api/services/lstm_model
+ - "max_ret" : /api/services/max_ret
+ - "min_risk" : /api/services/min_risk
 
  The string in quotes can be used when defining a subset of services while performing a POST request on /nlp/services
 
