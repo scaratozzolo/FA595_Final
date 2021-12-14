@@ -104,3 +104,53 @@ def allocation_service(data=None):
     return jsonify(PortOpt(tickers=data['tickers']).allocate())
 
 
+@app.route("/api/services/max_ret", methods=["POST"])
+def allocation_service(data=None):
+
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "tick1" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "tick2" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif type(data["tick1"]) is not str:
+        return jsonify({"error":"'tickers' is not a string"})
+    elif type(data["tick2"]) is not str:
+        return jsonify({"error":"'tickers' is not a string"})
+    elif "s1" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "s2" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "cor" not in data:
+        return jsonify({"error":"'correlation' missing from payload"})
+
+    return jsonify(max_ret(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],tick2=data['tick2'],cor=data['cor'])
+
+                   
+ @app.route("/api/services/min_risk", methods=["POST"])
+def allocation_service(data=None):
+
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error":"no data provided"})
+
+    if "tick1" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif "tick2" not in data:
+        return jsonify({"error":"'ticker' missing from payload"})
+    elif type(data["tick1"]) is not str:
+        return jsonify({"error":"'tickers' is not a string"})
+    elif type(data["tick2"]) is not str:
+        return jsonify({"error":"'tickers' is not a string"})
+    elif "s1" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "s2" not in data:
+        return jsonify({"error":"'variance' missing from payload"})
+    elif "cor" not in data:
+        return jsonify({"error":"'correlation' missing from payload"})
+
+    return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],tick2=data['tick2'],cor=data['cor'])
