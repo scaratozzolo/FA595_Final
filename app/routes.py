@@ -34,6 +34,8 @@ def services():
                 "all": all_service,
                 "lstm_model": lstm_service,
                 "allocation": allocation_service,
+                "max_ret" : maximum_return_service,
+                "min_risk": minimum_risk_service
         }
 
     if request.method == "GET":
