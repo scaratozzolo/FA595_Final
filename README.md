@@ -86,3 +86,28 @@ Response from the server will look like:
 The order of the ticker percentages is found in the tickers key. This is because during data collection the tickers are alphabetized.
 
 
+### POST /api/services/max_ret
+
+The max_return endpoint allows a user to send two tickers, their variance and the covariance between them to the server and have an output of efficient frontier based on maximizing the return of the two asset portfolio.
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"tick1": "1st ticker", "tick2": "2nd ticker", "s1": "1st ticker's variance", "s2": "2nd ticker's variance", "cor":"covariance between the tickers"}
+
+Response from the server will look like:
+
+{"return": float, "risk": float}
+
+
+### POST /api/services/min_risk
+
+The max_return endpoint allows a user to send two tickers, their variance and the covariance between them to the server and have an output of efficient frontier based on minimizing the risk (variance) of the two asset portfolio.
+
+This endpoint can only be accessed through a POST request. The payload must be in the form of: 
+
+{"tick1": "1st ticker", "tick2": "2nd ticker", "s1": "1st ticker's variance", "s2": "2nd ticker's variance", "cor":"covariance between the tickers"}
+
+Response from the server will look like:
+
+{"return": float, "risk": float}
+
