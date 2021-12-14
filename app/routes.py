@@ -36,6 +36,10 @@ def services():
                 "allocation": allocation_service,
                 "max_ret" : maximum_return_service,
                 "min_risk": minimum_risk_service
+                "beta": beta_service,
+                "sharpe": sharpe_service,
+                "beta_allocation": beta_allocation_service,
+                "compute_VaR": compute_VaR_service
         }
 
     if request.method == "GET":
@@ -71,6 +75,10 @@ def all_service(data=None):
     services["allocation"] = allocation_service(data).get_json()
     services["max_ret"] = maximum_return_service(data).get_json()
     services["min_risk"] = minimum_risk_service(data).get_json()
+    services["beta"] = beta_service(data).get_json()
+    services["sharpe"] = sharpe_service(data).get_json()
+    services["beta_allocation"] = beta_allocation_service(data).get_json()
+    services["compute_VaR"] = compute_VaR_service(data).get_json()
 
     return jsonify(services)
 
@@ -88,8 +96,8 @@ def lstm_service(data=None):
     return jsonify(lstm_model(ticker=data['ticker']))
 
 
-@app.route("/api/services/allocation", methods=["POST"])
-def allocation_service(data=None):
+@app.route("/api/services/beta_allocation", methods=["POST"])
+def beta_allocation_service(data=None):
 
     if not data:
         data = request.json
@@ -100,9 +108,12 @@ def allocation_service(data=None):
         return jsonify({"error":"'tickers' missing from payload"})
     elif type(data["tickers"]) is not list:
         return jsonify({"error":"'tickers' is not a list"})
+    elif "beta" not in data:
+        return jsonify({"error":"'beta' missing from payload"})
 
-    return jsonify(PortOpt(tickers=data['tickers']).allocate())
+    return jsonify(PortOpt(tickers=data['tickers'], beta=data['beta']).allocate())
 
+  
 
 @app.route("/api/services/max_ret", methods=["POST"])
 def maximum_return_service(data=None):
@@ -128,7 +139,6 @@ def maximum_return_service(data=None):
                    
  @app.route("/api/services/min_risk", methods=["POST"])
 def minimum_risk_service(data=None):
-
     if not data:
         data = request.json
         if not data:
@@ -144,4 +154,61 @@ def minimum_risk_service(data=None):
         return jsonify({"error":"'variance' missing from payload"})
     elif "cor" not in data:
         return jsonify({"error":"'covariance' missing from payload"})
+                   
     return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor'])
+                   
+                   
+ @app.route("/api/services/beta", methods=["POST"])
+def beta_service(data=None):                  
+                   
+    if "tickers" not in data:
+        return jsonify({"error":"'tickers' missing from payload"})
+    elif "start_dt" not in data:
+        return jsonify({"error":"'start date' missing from payload"})
+    elif "end_dt" not in data:
+        return jsonify({"error":"'end date' missing from payload"})
+    elif "inter" not in data:
+        return jsonify({"error":"'interval' missing from payload"})
+    # Check that two tickers are inputted
+    elif len(data["tickers"]) != 2:
+        return jsonify({"error":"input two tickers"})
+
+    return jsonify(beta(tickers=data['tickers'], start_dt=data['start_dt'], end_dt=data['end_dt'], inter=data['inter']))
+
+@app.route("/api/services/sharpe", methods=["POST"])
+def sharpe_service(data=None):
+
+    if "tickers" not in data:
+        return jsonify({"error":"'tickers' missing from payload"})
+    elif "start_dt" not in data:
+        return jsonify({"error":"'start date' missing from payload"})
+    elif "end_dt" not in data:
+        return jsonify({"error":"'end date' missing from payload"})
+    elif "inter" not in data:
+        return jsonify({"error":"'interval' missing from payload"})
+    elif "weights" not in data:
+        return jsonify({"error":"'weights' missing from payload"})
+    elif type(data["tickers"]) is not list:
+        return jsonify({"error":"'tickers' is not a list"})
+    # Check that weight inputted for each symbol
+    elif len(data["weights"]) != len(data["tickers"]):
+        return jsonify({"error":"enter a weight for each ticker"})
+    # Check that weights = 1
+    if sum(data["weights"]) != 1:
+        return jsonify({"error":"check that weights total 100%"})
+
+    return jsonify(sharpe(tickers=data['tickers'], start_dt=data['start_dt'], end_dt=data['end_dt'], inter=data['inter'], weights=data['weights']))
+
+@app.route("/api/services/compute_VaR", methods=["POST"])
+def compute_VaR_service(data=None):
+    if not data:
+        data = request.json
+        if not data:
+            return jsonify({"error": "no data provided"})
+
+    if "tickers" not in data:
+        return jsonify({"error": "'tickers' missing from payload"})
+    elif type(data["tickers"]) is not list:
+        return jsonify({"error":"'tickers' is not a list"})
+
+    return jsonify(compute_VaR(tickers=data['tickers']))
