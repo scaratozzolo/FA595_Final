@@ -95,6 +95,6 @@ This endpoint can only be accessed through a POST request. The payload must be i
 
 Response from the server will look like:
 
-["Given the weight of each asset, portfolio mean, and portfolio volatility below, 10-day VaR at 99% confidence level is "
-'{"columns":["Col1","Col2"],"index":[0,1,2],"data":[["ticker", %], ["portfolio mean", %], ["portfolio volatility", %]]}']
+['{"columns":["Col1","Col2"],"index":[0,1,2,3],"data":[["ticker","%"],["ticker","%"],["portfolio mean","%"],["portfolio volatility","%"]]}', 
+'10-day VaR at 99% confidence level is "VaR", given the weight of each asset, portfolio mean, and portfolio volatility above.']
 
