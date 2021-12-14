@@ -84,7 +84,7 @@ class PortOpt:
         opt_results = opt.minimize(self._neg_sharpe, init_guess, method='SLSQP', bounds=bounds, constraints=cons)
         
         return {"results": {k:v for k,v in zip(self.rets.columns.to_list(), opt_results.x.round(3).tolist())}, "sharpe": opt_results.fun.round(3)*-1, 
-                "calculated_beta": np.dot(self.beta_vec, opt_results.x).round(3), "success": opt_results.success}
+                "calculated_beta": np.dot(self.beta_vec, opt_results.x).round(3), "success": str(opt_results.success)}
 
 
 
