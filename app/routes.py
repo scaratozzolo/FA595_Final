@@ -105,7 +105,7 @@ def allocation_service(data=None):
 
 
 @app.route("/api/services/max_ret", methods=["POST"])
-def allocation_service(data=None):
+def maximum_return_service(data=None):
 
     if not data:
         data = request.json
@@ -127,7 +127,7 @@ def allocation_service(data=None):
 
                    
  @app.route("/api/services/min_risk", methods=["POST"])
-def allocation_service(data=None):
+def minimum_risk_service(data=None):
 
     if not data:
         data = request.json
