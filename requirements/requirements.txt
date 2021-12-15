@@ -2,9 +2,7 @@ flask
 yfinance
 tf-nightly
 scikit-learn
-scipy
 numpy 
 pandas
-scipy.linalg
-scipy.optimize
+scipy
 cvxopt
