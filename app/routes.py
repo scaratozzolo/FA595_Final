@@ -33,12 +33,11 @@ def services():
     __services = {
                 "all": all_service,
                 "lstm_model": lstm_service,
-                "allocation": allocation_service,
+                "beta_allocation": beta_allocation_service,
                 "max_ret" : maximum_return_service,
-                "min_risk": minimum_risk_service
+                "min_risk": minimum_risk_service,
                 "beta": beta_service,
                 "sharpe": sharpe_service,
-                "beta_allocation": beta_allocation_service,
                 "compute_VaR": compute_VaR_service
         }
 
@@ -72,12 +71,11 @@ def all_service(data=None):
 
     services = {}
     services["lstm_model"] = lstm_service(data).get_json()
-    services["allocation"] = allocation_service(data).get_json()
+    services["beta_allocation"] = beta_allocation_service(data).get_json()
     services["max_ret"] = maximum_return_service(data).get_json()
     services["min_risk"] = minimum_risk_service(data).get_json()
     services["beta"] = beta_service(data).get_json()
     services["sharpe"] = sharpe_service(data).get_json()
-    services["beta_allocation"] = beta_allocation_service(data).get_json()
     services["compute_VaR"] = compute_VaR_service(data).get_json()
 
     return jsonify(services)
@@ -134,10 +132,10 @@ def maximum_return_service(data=None):
     elif "cor" not in data:
         return jsonify({"error":"'covariance' missing from payload"})
 
-    return jsonify(max_ret(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor'])
+    return jsonify(max_ret(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor']))
 
                    
- @app.route("/api/services/min_risk", methods=["POST"])
+@app.route("/api/services/min_risk", methods=["POST"])
 def minimum_risk_service(data=None):
     if not data:
         data = request.json
@@ -155,10 +153,10 @@ def minimum_risk_service(data=None):
     elif "cor" not in data:
         return jsonify({"error":"'covariance' missing from payload"})
                    
-    return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor'])
+    return jsonify(min_risk(tick1=data['tick1'],tick2=data['tick2'],s1=data['s1'],s2=data['s2'],cor=data['cor']))
                    
                    
- @app.route("/api/services/beta", methods=["POST"])
+@app.route("/api/services/beta", methods=["POST"])
 def beta_service(data=None):                  
                    
     if "tickers" not in data:
