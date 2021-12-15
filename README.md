@@ -80,7 +80,7 @@ This endpoint can only be accessed through a POST request. The payload must be i
 
 Response from the server will look like:
 
-{"prediction": float, "mse": float}
+{"prediction": float, "rmse": float}
 
 
 ### POST /api/services/beta_allocation
@@ -93,7 +93,7 @@ This endpoint can only be accessed through a POST request. The payload must be i
 
 Response from the server will look like:
 
-{'results': {"ticker": float}, 'sharpe': float, 'calculated_beta': float, 'success': boolean}
+{'results': {"ticker": float}, 'sharpe': float, 'calculated_beta': float, 'success': string_boolean}
 
 
 ### POST /api/services/compute_VaR
